@@ -1,0 +1,199 @@
+<html>
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+        integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
+        integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script type="text/javascript"
+        src="//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+    <style>
+        .slider {
+            margin: 20px;
+            height: 120px;
+            float: left;
+        }
+
+        .slider-horizontal {
+            margin: 30px;
+            width: 210px;
+            float: left;
+        }
+
+        .bold {
+            color: #f6931f;
+            font-weight: bold;
+            border: 0;
+        }
+
+        .artistTitle {
+            font-size: 16px;
+            font-weight: 400;
+        }
+    </style>
+    <script>
+        $(function () {
+
+            var updateFunction = function updateReview() {
+                var qtde = $("#qtdeArtists").slider("value");
+                var total = 0;
+                $("#tunning .slider").each(function () {
+                    total += $(this).slider("value");
+                });
+
+                $("#tunning .slider").each(function () {
+                    var id = $(this).attr("id");
+                    $(".sp-" + id).empty().append(Math.round(($(this).slider("value") * qtde) / total));
+                });
+            };
+
+
+            $("#qtdeArtists").slider({
+                value: 20,
+                min: 5,
+                max: 40,
+                step: 5,
+                range: "min",
+                orientation: "horizontal",
+                slide: function (event, ui) {
+                    $("#amount").val(ui.value);
+                },
+                change: updateFunction
+            });
+            $("#amount").val($("#qtdeArtists").slider("value"));
+
+            $("#tunning .slider").each(function () {
+                // read initial values from markup and remove that
+                var value = parseInt($(this).text(), 10);
+                $(this).empty().slider({
+                    value: value,
+                    range: "min",
+                    orientation: "vertical",
+                    slide: updateFunction
+                });
+            });
+
+            //first call to populate review before changes
+            updateFunction.call();
+
+            $("#fetchList").click(function () {
+                $("#fetchList").attr("disabled", "disabled");
+                $.ajax({
+                    url: "lastfm.php",
+                    cache: false,
+                    data: { tunning: { classics: $(".sp-classics").first().text(), known: $(".sp-known").first().text(), adventurous: $(".sp-adventurous").first().text(), wild: $(".sp-wild").first().text(), insane: $(".sp-insane").first().text() } }
+                })
+                    .done(function (result) {
+                        $("#ajax-list-results").empty().append(result);
+                        $("#fetchList").removeAttr("disabled")
+                        $("body, html").animate({
+                            scrollTop: $("#ajax-list-results").offset().top
+                        }, 600);
+
+                        $(".tags-area").each(function () {
+
+                            var tagElement = $(this);
+
+                            $.ajax({
+                                url: "lastfm.php?oper=tags",
+                                cache: false,
+                                data: { mbid: $(this).attr("id") }
+                            })
+                                .done(function (result) {
+                                    tagElement.html(result);
+                                });
+                        });
+
+                    });
+            });
+
+        });
+
+    </script>
+</head>
+
+<body>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span>
+                01 - How many artists
+            </h3>
+        </div>
+        <div class="panel-body">
+            <div id="qtdeArtists" class="slider-horizontal"></div><input type="text" size=2 id="amount" readonly
+                class="bold" style="float: left; margin-top: 25px">
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <span class="glyphicon glyphicon-stats" aria-hidden="true"></span>
+                02 - Adventure Tunning
+            </h3>
+        </div>
+        <div class="panel-body">
+            <div id="tunning">
+                <div id="classics" class="slider">80</div>
+                <div id="known" class="slider">65</div>
+                <div id="adventurous" class="slider">40</div>
+                <div id="wild" class="slider">32</div>
+                <div id="insane" class="slider">68</div>
+            </div>
+            <div style="clear:both;">
+                <span class="bold sp-classics" style="margin-left:20px"></span>
+                <span class="bold sp-known" style="margin-left:43px"></span>
+                <span class="bold sp-adventurous" style="margin-left:40px"></span>
+                <span class="bold sp-wild" style="margin-left:40px"></span>
+                <span class="bold sp-insane" style="margin-left:40px"></span>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+                03 - Reviewing
+            </h3>
+        </div>
+        <div class="panel-body">
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td>There will be about <span class="bold sp-classics"></span> very <span
+                                class="bold">classics</span> artists in this list </td>
+                    </tr>
+                    <tr>
+                        <td>And about <span class="bold sp-known"></span> well <span class="bold">known</span> artists
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>also <span class="bold sp-adventurous"></span> <span class="bold">adventurous</span> bands
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>without forgetting this <span class="bold sp-wild"></span> <span class="bold">wild</span>
+                            ones </td>
+                    </tr>
+                    <tr>
+                        <td>plus those <span class="bold sp-insane"></span> <span class="bold">insanes</span> that you
+                            probably don't remember </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="btn-group" role="group" aria-label="...">
+            <button id="fetchList" type="button" class="btn btn-default">All set! Fetch my list...</button>
+        </div>
+
+        <div id="ajax-list-results" style="margin-top: 15px"></div>
+</body>
