@@ -5,8 +5,7 @@ error_reporting(1);
 include 'functions.php';
 
 //Handler Section
-
-$handler = $_GET['oper'];
+$handler = isset($_GET['oper']) ? $_GET['oper'] : "";
 
 switch ($handler) {
   case 'tags':
@@ -44,11 +43,11 @@ switch ($handler) {
               //Não serão feitas requisições para categorias não desejadas
               if($value <= 0 ) continue;
 
-              $xml = getResults($params["pageLimit"], rand($sections[$key][0], $sections[$key][1]));?>
+              $xml = getResults($params["pagelimit"], rand($sections[$key][0], $sections[$key][1]));?>
 
               <?php
                 $artists = $xml->artists->artist;
-                $toKeep = randomGen(0, $pageLimit -1, $value);
+                $toKeep = randomGen(0, $params["pagelimit"] -1, $value);
               ?>
               <?php foreach( $toKeep as $index ) : ?>
                 <tr>

@@ -17,9 +17,6 @@ function getResults($limit = 1, $page = "")
     $url = $params["baseUrl"] . "api_key=" . $params["apiKey"] . "&method=$method&user=" . $params["user"] . "&limit=$limit";
     $url .= !empty($page) ? "&page=$page" : "";
     $results = file_get_contents($url);
-    error_log($url);
-    error_log($params);
-    error_log($results);
 
     $xml = new SimpleXMLElement($results);
 
@@ -98,7 +95,7 @@ function defineSections($totalArtists)
 
     $params = parse_ini_file("params.ini");
 
-    $pageLimit = $params["pageLimit"];
+    $pageLimit = $params["pagelimit"];
 
     $sectionFim = 1;
     $sectionIni = 1;
