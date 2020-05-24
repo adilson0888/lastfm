@@ -52,7 +52,7 @@ switch ($handler) {
               <?php foreach( $toKeep as $index ) : ?>
                 <tr>
                   <?php $artistUrl = "tasker://".stripAccents($artists[$index]->name); ?>
-                  <td><a href="<?=$artistUrl?>"><img src="<?php echo !empty($artists[$index]->image[1]) ? $artists[$index]->image[1] : $noimage ?>"></a></td>
+                  <td><a href="<?=$artistUrl?>"><img src="<?php echo !empty(strval($artists[$index]->image[1])) ? strval($artists[$index]->image[1]) : $noimage ?>"></a></td>
                   <td>
                     <?php if(strlen($artists[$index]->name) > 0) : ?>
                       <a href="<?=$artistUrl?>" class="artistTitle"><?=$artists[$index]->name?></a><br/>
