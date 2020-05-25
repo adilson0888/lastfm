@@ -19,9 +19,40 @@ apiKey     =
 
 ## Usgin the web app
 ![setup](https://imgshare.io/images/2020/05/25/Capture01.png)
-![results](https://imgshare.io/images/2020/05/25/Capture02.png)
+### 01. How many artists
+Slide for amount of artists you wold like to retreive
+### 02. Adventure Tunning
+Adjust the kind of artists you would like to retreive. Here's how the logic is applyed to selected ther artists from the library
 
-## Using Tasker
+Lastfm orders the artists in the library based on how many times you've listened to each artists, so the artists you hear the most are on the top of the list
+The app groups the artists in five sections (classics, known, adventurous, wild and insanes --dont mind about the names) 
+
+The categories correspond to a percentual portion of the library as follows:
+
+- classics : 5%
+- known : 15%
+- adventurous : 25%
+- wild : 25%
+- insane : 30% 
+
+In this section, each slides correponds to the amount of artists you want in your list from the respective category. Form exemplo, if you put 3 in classics (firts vertical slide) you will get 3 randomlly picked artists of the firts 5% of the library.
+The quantity of this slides sums the total selected on ther first stage.
+
+### 03. Reviewing
+Just a description of what you've configured in the preview sections
+
+Click on Fetch button.
+
+### 04. Results
+![results](https://imgshare.io/images/2020/05/25/Capture02.png).
+The list of bands requested with the following info:
+- Artist name
+- Artist tasker url to be used as described on next section (you can change this url to directly open your favorite music streamming service)
+- Tags from the music style of each artist;
+- Should return an image of the correponding artist, but lastfm removed this option from its APis and now we just have a giant star.
+- Que number of times you have listened to that artist
+
+## Using Tasker Project
 You will notice that all artists urls are pointing something like tasker://Iron Maiden, this is a internal url that can be intercepted by tasker and execute the script to automatically open this artist on GPM.
 To use this tasker project, you just need to import the file **tasker/LastFm.prj.xml** on your Tasker app. 
 To use the entire project you will need the following apps:
