@@ -1,0 +1,429 @@
+<TaskerData sr="" dvi="1" tv="5.9.2">
+	<dmetric>1080.0,2116.0</dmetric>
+	<Profile sr="prof12" ve="2">
+		<cdate>1501716671766</cdate>
+		<clp>true</clp>
+		<edate>1590432185501</edate>
+		<id>12</id>
+		<mid0>14</mid0>
+		<Event sr="con0" ve="2">
+			<code>18927444</code>
+			<pri>0</pri>
+			<Bundle sr="arg0">
+				<Vals sr="val">
+					<Command>CloseLFM</Command>
+					<Command-type>java.lang.String</Command-type>
+					<CommandCaseInsensitive>false</CommandCaseInsensitive>
+					<CommandCaseInsensitive-type>java.lang.Boolean</CommandCaseInsensitive-type>
+					<CommandExact>false</CommandExact>
+					<CommandExact-type>java.lang.Boolean</CommandExact-type>
+					<CommandRegex>false</CommandRegex>
+					<CommandRegex-type>java.lang.Boolean</CommandRegex-type>
+					<VariableArray>false</VariableArray>
+					<VariableArray-type>java.lang.Boolean</VariableArray-type>
+					<VariableNames></VariableNames>
+					<VariableNames-type>java.lang.String</VariableNames-type>
+					<com.twofortyfouram.locale.intent.extra.BLURB>Command Filter: CloseLFM</com.twofortyfouram.locale.intent.extra.BLURB>
+					<com.twofortyfouram.locale.intent.extra.BLURB-type>java.lang.String</com.twofortyfouram.locale.intent.extra.BLURB-type>
+					<config_CustomCommandsApp>&lt;null&gt;</config_CustomCommandsApp>
+					<config_CustomCommandsApp-type>java.lang.String</config_CustomCommandsApp-type>
+					<config_CustomCommandsCommand>&lt;null&gt;</config_CustomCommandsCommand>
+					<config_CustomCommandsCommand-type>java.lang.String</config_CustomCommandsCommand-type>
+					<net.dinglisch.android.tasker.EXTRA_NSR_DEPRECATED>true</net.dinglisch.android.tasker.EXTRA_NSR_DEPRECATED>
+					<net.dinglisch.android.tasker.EXTRA_NSR_DEPRECATED-type>java.lang.Boolean</net.dinglisch.android.tasker.EXTRA_NSR_DEPRECATED-type>
+					<net.dinglisch.android.tasker.extras.REQUESTED_TIMEOUT>20000</net.dinglisch.android.tasker.extras.REQUESTED_TIMEOUT>
+					<net.dinglisch.android.tasker.extras.REQUESTED_TIMEOUT-type>java.lang.Integer</net.dinglisch.android.tasker.extras.REQUESTED_TIMEOUT-type>
+					<net.dinglisch.android.tasker.extras.VARIABLE_REPLACE_KEYS>Command plugininstanceid plugintypeid </net.dinglisch.android.tasker.extras.VARIABLE_REPLACE_KEYS>
+					<net.dinglisch.android.tasker.extras.VARIABLE_REPLACE_KEYS-type>java.lang.String</net.dinglisch.android.tasker.extras.VARIABLE_REPLACE_KEYS-type>
+					<net.dinglisch.android.tasker.subbundled>true</net.dinglisch.android.tasker.subbundled>
+					<net.dinglisch.android.tasker.subbundled-type>java.lang.Boolean</net.dinglisch.android.tasker.subbundled-type>
+					<plugininstanceid>92824b29-0891-4bbf-9e60-55cd390ffcc4</plugininstanceid>
+					<plugininstanceid-type>java.lang.String</plugininstanceid-type>
+					<plugintypeid>com.joaomgcd.autoappshub.intent.IntentCommand</plugintypeid>
+					<plugintypeid-type>java.lang.String</plugintypeid-type>
+				</Vals>
+			</Bundle>
+			<Str sr="arg1" ve="3">com.joaomgcd.autoappshub</Str>
+			<Str sr="arg2" ve="3">com.joaomgcd.autoappshub.activity.ActivityConfigCommand</Str>
+		</Event>
+	</Profile>
+	<Profile sr="prof8" ve="2">
+		<cdate>1501716671766</cdate>
+		<edate>1590432189335</edate>
+		<id>8</id>
+		<mid0>10</mid0>
+		<Event sr="con0" ve="2">
+			<code>18927444</code>
+			<pri>0</pri>
+			<Bundle sr="arg0">
+				<Vals sr="val">
+					<Command>ShowLFM</Command>
+					<Command-type>java.lang.String</Command-type>
+					<CommandCaseInsensitive>false</CommandCaseInsensitive>
+					<CommandCaseInsensitive-type>java.lang.Boolean</CommandCaseInsensitive-type>
+					<CommandExact>false</CommandExact>
+					<CommandExact-type>java.lang.Boolean</CommandExact-type>
+					<CommandRegex>false</CommandRegex>
+					<CommandRegex-type>java.lang.Boolean</CommandRegex-type>
+					<VariableArray>false</VariableArray>
+					<VariableArray-type>java.lang.Boolean</VariableArray-type>
+					<VariableNames></VariableNames>
+					<VariableNames-type>java.lang.String</VariableNames-type>
+					<com.twofortyfouram.locale.intent.extra.BLURB>Command Filter: ShowLFM</com.twofortyfouram.locale.intent.extra.BLURB>
+					<com.twofortyfouram.locale.intent.extra.BLURB-type>java.lang.String</com.twofortyfouram.locale.intent.extra.BLURB-type>
+					<config_CustomCommandsApp>&lt;null&gt;</config_CustomCommandsApp>
+					<config_CustomCommandsApp-type>java.lang.String</config_CustomCommandsApp-type>
+					<config_CustomCommandsCommand>&lt;null&gt;</config_CustomCommandsCommand>
+					<config_CustomCommandsCommand-type>java.lang.String</config_CustomCommandsCommand-type>
+					<net.dinglisch.android.tasker.EXTRA_NSR_DEPRECATED>true</net.dinglisch.android.tasker.EXTRA_NSR_DEPRECATED>
+					<net.dinglisch.android.tasker.EXTRA_NSR_DEPRECATED-type>java.lang.Boolean</net.dinglisch.android.tasker.EXTRA_NSR_DEPRECATED-type>
+					<net.dinglisch.android.tasker.extras.REQUESTED_TIMEOUT>20000</net.dinglisch.android.tasker.extras.REQUESTED_TIMEOUT>
+					<net.dinglisch.android.tasker.extras.REQUESTED_TIMEOUT-type>java.lang.Integer</net.dinglisch.android.tasker.extras.REQUESTED_TIMEOUT-type>
+					<net.dinglisch.android.tasker.extras.VARIABLE_REPLACE_KEYS>Command plugininstanceid plugintypeid </net.dinglisch.android.tasker.extras.VARIABLE_REPLACE_KEYS>
+					<net.dinglisch.android.tasker.extras.VARIABLE_REPLACE_KEYS-type>java.lang.String</net.dinglisch.android.tasker.extras.VARIABLE_REPLACE_KEYS-type>
+					<net.dinglisch.android.tasker.subbundled>true</net.dinglisch.android.tasker.subbundled>
+					<net.dinglisch.android.tasker.subbundled-type>java.lang.Boolean</net.dinglisch.android.tasker.subbundled-type>
+					<plugininstanceid>92824b29-0891-4bbf-9e60-55cd390ffcc4</plugininstanceid>
+					<plugininstanceid-type>java.lang.String</plugininstanceid-type>
+					<plugintypeid>com.joaomgcd.autoappshub.intent.IntentCommand</plugintypeid>
+					<plugintypeid-type>java.lang.String</plugintypeid-type>
+				</Vals>
+			</Bundle>
+			<Str sr="arg1" ve="3">com.joaomgcd.autoappshub</Str>
+			<Str sr="arg2" ve="3">com.joaomgcd.autoappshub.activity.ActivityConfigCommand</Str>
+		</Event>
+	</Profile>
+	<Project sr="proj0" ve="2">
+		<cdate>1451487537888</cdate>
+		<name>LastFm</name>
+		<pids>12,8</pids>
+		<scenes>LastFm,Bubble</scenes>
+		<tids>14,175,179,178,10,173</tids>
+		<Img sr="icon" ve="2">
+			<nme>hd_aaa_ext_music_2</nme>
+		</Img>
+	</Project>
+	<Scene sr="sceneBubble">
+		<cdate>1451830856269</cdate>
+		<edate>1590432155620</edate>
+		<heightLand>-1</heightLand>
+		<heightPort>218</heightPort>
+		<nme>Bubble</nme>
+		<widthLand>-1</widthLand>
+		<widthPort>162</widthPort>
+		<ImageElement sr="elements0" ve="2">
+			<clickTask>179</clickTask>
+			<flags>4</flags>
+			<geom>6,52,150,126,6,132,150,132</geom>
+			<Str sr="arg0" ve="3">Image1</Str>
+			<Img sr="arg1" ve="2">
+				<cls>com.peterjosling.scroball.ui.SplashScreen</cls>
+				<pkg>com.peterjosling.scroball</pkg>
+			</Img>
+			<Int sr="arg2" val="255"/>
+			<RectElement sr="background">
+				<flags>4</flags>
+				<geom>-1,-1,-1,-1,-1,-1,-1,-1</geom>
+				<Str sr="arg0" ve="3"/>
+				<Int sr="arg1" val="0"/>
+				<Str sr="arg2" ve="3"/>
+				<Str sr="arg3" ve="3"/>
+				<Int sr="arg4" val="0"/>
+				<Str sr="arg5" ve="3">#FF000000</Str>
+				<Int sr="arg6" val="0"/>
+				<Int sr="arg7" val="0"/>
+			</RectElement>
+		</ImageElement>
+		<ImageElement sr="elements1" ve="2">
+			<clickTask>178</clickTask>
+			<flags>4</flags>
+			<geom>6,0,74,58,6,0,150,132</geom>
+			<Str sr="arg0" ve="3">Image2</Str>
+			<Img sr="arg1" ve="2">
+				<nme>mw_navigation_close</nme>
+			</Img>
+			<Int sr="arg2" val="255"/>
+			<RectElement sr="background">
+				<flags>4</flags>
+				<geom>-1,-1,-1,-1,-1,-1,-1,-1</geom>
+				<Str sr="arg0" ve="3"/>
+				<Int sr="arg1" val="0"/>
+				<Str sr="arg2" ve="3"/>
+				<Str sr="arg3" ve="3"/>
+				<Int sr="arg4" val="0"/>
+				<Str sr="arg5" ve="3">#FF000000</Str>
+				<Int sr="arg6" val="0"/>
+				<Int sr="arg7" val="0"/>
+			</RectElement>
+		</ImageElement>
+		<PropertiesElement sr="props">
+			<Int sr="arg0" val="1"/>
+			<Int sr="arg1" val="0"/>
+			<Str sr="arg2" ve="3">#00FFFFFF</Str>
+			<Int sr="arg3" val="0"/>
+			<Str sr="arg4" ve="3">Bubble</Str>
+			<Str sr="arg5" ve="3"/>
+			<Img sr="arg6" ve="2"/>
+			<Str sr="arg7" ve="3"/>
+		</PropertiesElement>
+	</Scene>
+	<Scene sr="sceneLastFm">
+		<cdate>1451749505636</cdate>
+		<edate>1590432157985</edate>
+		<heightLand>-1</heightLand>
+		<heightPort>2116</heightPort>
+		<nme>LastFm</nme>
+		<widthLand>-1</widthLand>
+		<widthPort>1080</widthPort>
+		<WebElement sr="elements0" ve="2">
+			<flags>4</flags>
+			<geom>0,0,1080,2116,2,133,1075,1500</geom>
+			<linkclickTask>175</linkclickTask>
+			<Str sr="arg0" ve="3">WebView1</Str>
+			<Int sr="arg1" val="0"/>
+			<Str sr="arg2" ve="3">https://addyourhostsite.com/music_list.html</Str>
+			<Int sr="arg3" val="0"/>
+			<Int sr="arg4" val="1"/>
+			<Int sr="arg5" val="0"/>
+			<Int sr="arg6" val="0"/>
+			<Int sr="arg7" val="0"/>
+			<RectElement sr="background">
+				<flags>4</flags>
+				<geom>-1,-1,-1,-1,-1,-1,-1,-1</geom>
+				<Str sr="arg0" ve="3"/>
+				<Int sr="arg1" val="0"/>
+				<Str sr="arg2" ve="3"/>
+				<Str sr="arg3" ve="3"/>
+				<Int sr="arg4" val="0"/>
+				<Str sr="arg5" ve="3">#FF000000</Str>
+				<Int sr="arg6" val="0"/>
+				<Int sr="arg7" val="0"/>
+			</RectElement>
+			<LinkClickFilter sr="filter0">
+				<stopEvent>true</stopEvent>
+				<urlMatch>tasker://*</urlMatch>
+			</LinkClickFilter>
+		</WebElement>
+		<PropertiesElement sr="props">
+			<Int sr="arg0" val="1"/>
+			<Int sr="arg1" val="0"/>
+			<Str sr="arg2" ve="3">#33FFFFFF</Str>
+			<Int sr="arg3" val="0"/>
+			<Str sr="arg4" ve="3">LastFm</Str>
+			<Str sr="arg5" ve="3"/>
+			<Img sr="arg6" ve="2"/>
+			<Str sr="arg7" ve="3"/>
+		</PropertiesElement>
+	</Scene>
+	<Task sr="task10">
+		<cdate>1501716684859</cdate>
+		<edate>1590432189335</edate>
+		<id>10</id>
+		<pri>6</pri>
+		<Action sr="act0" ve="7">
+			<code>47</code>
+			<Str sr="arg0" ve="3">LastFm</Str>
+			<Int sr="arg1" val="5"/>
+			<Int sr="arg2" val="100"/>
+			<Int sr="arg3" val="100"/>
+			<Int sr="arg4" val="0"/>
+			<Int sr="arg5" val="0"/>
+			<Int sr="arg6" val="1"/>
+			<Int sr="arg7" val="1"/>
+		</Action>
+	</Task>
+	<Task sr="task14">
+		<cdate>1524100922756</cdate>
+		<edate>1590432185501</edate>
+		<id>14</id>
+		<pri>6</pri>
+		<Action sr="act0" ve="7">
+			<code>49</code>
+			<Str sr="arg0" ve="3">LastFm</Str>
+		</Action>
+	</Task>
+	<Task sr="task173">
+		<cdate>1419344312156</cdate>
+		<edate>1590429965188</edate>
+		<id>173</id>
+		<nme>Show Bubble</nme>
+		<pri>7</pri>
+		<Action sr="act0" ve="7">
+			<code>47</code>
+			<Str sr="arg0" ve="3">LastFm</Str>
+			<Int sr="arg1" val="5"/>
+			<Int sr="arg2" val="0"/>
+			<Int sr="arg3" val="0"/>
+			<Int sr="arg4" val="0"/>
+			<Int sr="arg5" val="0"/>
+			<Int sr="arg6" val="1"/>
+			<Int sr="arg7" val="1"/>
+		</Action>
+		<Action sr="act1" ve="7">
+			<code>1165325195</code>
+			<Bundle sr="arg0">
+				<Vals sr="val">
+					<AlwaysRefreshPreset>false</AlwaysRefreshPreset>
+					<AlwaysRefreshPreset-type>java.lang.Boolean</AlwaysRefreshPreset-type>
+					<ScreenPreset>bubble</ScreenPreset>
+					<ScreenPreset-type>java.lang.String</ScreenPreset-type>
+					<com.twofortyfouram.locale.intent.extra.BLURB>Screen Preset: Bubble
+Display Mode: Overlay
+Close Overlay ID: bubble
+Source: /storage/emulated/0/AutoTools/bubble/page.html
+Toast Duration: 5000
+Background Color: #00FFEBEE
+Width: 50
+Height: 50
+Gravity: Bottom Left
+Offset Y: 100
+Animation: Zoom In
+Overlay Id: bubble
+Show Duration: 500
+Hide Duration: 250
+Drag: Draggable Anywhere
+Drag Movements: All Directions
+Fling To Dismiss: All Directions
+Hide Dialog Shadow: true
+Command On Close: CloseLFM
+Update: true
+Image: app-icon:com.peterjosling.scroball
+Round Image: true
+Grayscale: 0%
+Blur: 0
+Opacity: 100%
+Brightness: 100%
+Contrast: 100%
+Saturate: 100%
+Sepia: 0%
+Invert: 0%
+Size: 16px
+Position: Left
+Color: #212121
+Character Border Color: #4A148C
+Border Color Thickness: 1
+Border Style: solid
+Background: linear-gradient(rgba(151, 190, 252, 0.7), rgba(182, 208, 249, 0.7))
+Size: 16px
+Text Color: white
+Background: red
+Border: 1px solid black
+Position: Top Right
+Badge Image Position: Bottom Right
+Tap: ShowLFM
+Long Tap: longbubbletap
+Prefix: swipe
+Command Prefix Down: positiondown
+Command Prefix Up: positionup
+Border Width: 3
+Border Color: #AB47BC
+Border Style: solid</com.twofortyfouram.locale.intent.extra.BLURB>
+					<com.twofortyfouram.locale.intent.extra.BLURB-type>java.lang.String</com.twofortyfouram.locale.intent.extra.BLURB-type>
+					<net.dinglisch.android.tasker.JSON_ENCODED_KEYS>parameters</net.dinglisch.android.tasker.JSON_ENCODED_KEYS>
+					<net.dinglisch.android.tasker.JSON_ENCODED_KEYS-type>java.lang.String</net.dinglisch.android.tasker.JSON_ENCODED_KEYS-type>
+					<net.dinglisch.android.tasker.RELEVANT_VARIABLES>&lt;StringArray sr=""&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES0&gt;%err
+Error Code
+Only available if you select &amp;lt;b&amp;gt;Continue Task After Error&amp;lt;/b&amp;gt; and the action ends in error&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES0&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES1&gt;%errmsg
+Error Message
+Only available if you select &amp;lt;b&amp;gt;Continue Task After Error&amp;lt;/b&amp;gt; and the action ends in error&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES1&gt;&lt;/StringArray&gt;</net.dinglisch.android.tasker.RELEVANT_VARIABLES>
+					<net.dinglisch.android.tasker.RELEVANT_VARIABLES-type>[Ljava.lang.String;</net.dinglisch.android.tasker.RELEVANT_VARIABLES-type>
+					<net.dinglisch.android.tasker.extras.VARIABLE_REPLACE_KEYS>parameters ScreenPreset plugininstanceid plugintypeid </net.dinglisch.android.tasker.extras.VARIABLE_REPLACE_KEYS>
+					<net.dinglisch.android.tasker.extras.VARIABLE_REPLACE_KEYS-type>java.lang.String</net.dinglisch.android.tasker.extras.VARIABLE_REPLACE_KEYS-type>
+					<net.dinglisch.android.tasker.subbundled>true</net.dinglisch.android.tasker.subbundled>
+					<net.dinglisch.android.tasker.subbundled-type>java.lang.Boolean</net.dinglisch.android.tasker.subbundled-type>
+					<parameters>{"inputJavascriptInject":{},"loadAllLinksInternally":false,"overlayToastDuration":"5000","timeout":30000,"webScreenOverlay":{"overlayDragLock":"0","overlayDragPosition":"9","overlayFlingToDismissDirection":"1","overlayHidDuration":"250","overlayId":"bubble","overlayReturnToOriginalPosition":false,"overlayShowDuration":"500"},"webscreebKeepScreenOn":false,"webscreenCloseOverlayId":"bubble","webscreenColors":{"webscreenInitialBackgroundColor":"#00FFEBEE"},"webscreenCommands":{"commandOnClose":"CloseLFM","continueOnError":false,"onlyLocalCommands":false,"waitForCommand":false,"webscreenCloseOnAutoAppsCommand":false},"webscreenDialog":{"dimBackground":false,"hideDialogShadow":true},"webscreenDialogMode":"3","webscreenHtmlInject":{"webscreenReturnHtmlInjection":false},"webscreenPreset":"bubble","webscreenSource":"/storage/emulated/0/AutoTools/bubble/page.html","webscreenWindow":{"dialogAnimation":"5","dialogGravity":"83","dialogHeight":"50","dialogOffsetX":"","dialogOffsetY":"100","dialogUseFullHeight":false,"dialogWidth":"50"},"generatedValues":{"inputwebscreengeneratedfilterSepia":"0%","inputwebscreengeneratedfilterSaturate":"100%","inputwebscreengeneratedbadgeTextColor":"white","inputwebscreengeneratedtextColor":"#212121","inputwebscreengeneratedimageRound":true,"inputwebscreengeneratedreportPositionEnabled":false,"inputwebscreengeneratedborderWidth":"3","inputwebscreengeneratedcommandTap":"ShowLFM","inputwebscreengeneratedtextBorderColor":"#4A148C","inputwebscreengeneratedfilterInvert":"0%","inputwebscreengeneratedtextBorderAroundThickness":"1","inputwebscreengeneratedfilterOpacity":"100%","inputwebscreengeneratedcommandPrefix":"swipe","inputwebscreengeneratedtextMaxWidth":"","inputwebscreengeneratedbadgeBackground":"red","inputwebscreengeneratedbadgePosition":"Top Right","inputwebscreengeneratedbadgeTextSize":"16px","inputwebscreengeneratedcommandPrefixPosition":"positionup","inputwebscreengeneratedimageSource":"app-icon:com.peterjosling.scroball","inputwebscreengeneratedcommandSwipeDown":"","inputwebscreengeneratedfilterBrightness":"100%","inputwebscreengeneratedtextSize":"16px","inputwebscreengeneratedautotoolsupdatewebscreenvariableaaaaasda":true,"inputwebscreengeneratedfilterGrayscale":"0%","inputwebscreengeneratedtextPosition":"Left","inputwebscreengeneratedcommandSwipeUp":"","inputwebscreengeneratedcommandSwipeRight":"","inputwebscreengeneratedborderColor":"#AB47BC","inputwebscreengeneratedfilterContrast":"100%","inputwebscreengeneratedbadgeBorder":"1px solid black","inputwebscreengeneratedcommandLongTap":"longbubbletap","inputwebscreengeneratedreportPositionDownEnabled":false,"inputwebscreengeneratedtext":"","inputwebscreengeneratedcommandPrefixPositionDown":"positiondown","inputwebscreengeneratedtextBorderAroundStyle":"solid","inputwebscreengeneratedimageBadgePosition":"Bottom Right","inputwebscreengeneratedborderStyle":"solid","inputwebscreengeneratedcommandSwipeLeft":"","inputwebscreengeneratedfilterBlur":"0","inputwebscreengeneratedtextBackground":"linear-gradient(rgba(151, 190, 252, 0.7), rgba(182, 208, 249, 0.7))","inputwebscreengeneratedbadgeText":""}}</parameters>
+					<parameters-type>java.lang.String</parameters-type>
+					<plugininstanceid>152e160b-ed1f-4a1f-b557-2a76d3d0d4cf</plugininstanceid>
+					<plugininstanceid-type>java.lang.String</plugininstanceid-type>
+					<plugintypeid>com.joaomgcd.autotools.intent.IntentWebScreen</plugintypeid>
+					<plugintypeid-type>java.lang.String</plugintypeid-type>
+				</Vals>
+			</Bundle>
+			<Str sr="arg1" ve="3">com.joaomgcd.autotools</Str>
+			<Str sr="arg2" ve="3">com.joaomgcd.autotools.activity.ActivityConfigWebScreen</Str>
+			<Int sr="arg3" val="30"/>
+		</Action>
+		<Action sr="act2" ve="7">
+			<code>47</code>
+			<on>false</on>
+			<Str sr="arg0" ve="3">Bubble</Str>
+			<Int sr="arg1" val="1"/>
+			<Int sr="arg2" val="0"/>
+			<Int sr="arg3" val="178"/>
+			<Int sr="arg4" val="0"/>
+			<Int sr="arg5" val="0"/>
+			<Int sr="arg6" val="1"/>
+			<Int sr="arg7" val="1"/>
+		</Action>
+		<Img sr="icn" ve="2">
+			<cls>com.peterjosling.scroball.ui.SplashScreen</cls>
+			<pkg>com.peterjosling.scroball</pkg>
+		</Img>
+	</Task>
+	<Task sr="task175">
+		<cdate>1451780278791</cdate>
+		<edate>1451780278791</edate>
+		<id>175</id>
+		<pri>8</pri>
+		<Action sr="act0" ve="7">
+			<code>598</code>
+			<Str sr="arg0" ve="3">%url</Str>
+			<Str sr="arg1" ve="3">tasker://</Str>
+			<Int sr="arg2" val="0"/>
+			<Int sr="arg3" val="0"/>
+			<Int sr="arg4" val="0"/>
+			<Str sr="arg5" ve="3"/>
+			<Int sr="arg6" val="1"/>
+			<Str sr="arg7" ve="3"/>
+		</Action>
+		<Action sr="act1" ve="7">
+			<code>548</code>
+			<Str sr="arg0" ve="3">%url</Str>
+			<Int sr="arg1" val="0"/>
+		</Action>
+		<Action sr="act2" ve="7">
+			<code>877</code>
+			<Str sr="arg0" ve="3">android.media.action.MEDIA_PLAY_FROM_SEARCH</Str>
+			<Int sr="arg1" val="1"/>
+			<Str sr="arg2" ve="3"/>
+			<Str sr="arg3" ve="3"/>
+			<Str sr="arg4" ve="3">Extra:android.intent.extra.focus:vnd.android.cursor.item/*</Str>
+			<Str sr="arg5" ve="3">query:%url</Str>
+			<Str sr="arg6" ve="3"/>
+			<Str sr="arg7" ve="3">com.google.android.music</Str>
+			<Str sr="arg8" ve="3"/>
+			<Int sr="arg9" val="1"/>
+		</Action>
+	</Task>
+	<Task sr="task178">
+		<cdate>1451831295924</cdate>
+		<edate>1451831295924</edate>
+		<id>178</id>
+		<pri>102</pri>
+		<Action sr="act0" ve="7">
+			<code>49</code>
+			<Str sr="arg0" ve="3">Bubble</Str>
+		</Action>
+		<Action sr="act1" ve="7">
+			<code>49</code>
+			<Str sr="arg0" ve="3">LastFm</Str>
+		</Action>
+	</Task>
+	<Task sr="task179">
+		<cdate>1451831314173</cdate>
+		<edate>1451831314173</edate>
+		<id>179</id>
+		<pri>102</pri>
+		<Action sr="act0" ve="7">
+			<code>47</code>
+			<Str sr="arg0" ve="3">LastFm</Str>
+			<Int sr="arg1" val="5"/>
+			<Int sr="arg2" val="100"/>
+			<Int sr="arg3" val="100"/>
+			<Int sr="arg4" val="0"/>
+			<Int sr="arg5" val="0"/>
+			<Int sr="arg6" val="1"/>
+			<Int sr="arg7" val="1"/>
+		</Action>
+	</Task>
+</TaskerData>

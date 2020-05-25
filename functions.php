@@ -9,9 +9,6 @@ function getResults($limit = 1, $page = "")
 
     $method = "library.getArtists";
 
-
-    //global $baseUrl, $apiKey, $user, $xml;
-
     $params = parse_ini_file("params.ini");
 
     $url = $params["baseUrl"] . "api_key=" . $params["apiKey"] . "&method=$method&user=" . $params["user"] . "&limit=$limit";
