@@ -3,7 +3,7 @@ Web application to fetch a random list of artists from a lastfm user library
 
 This little web app was made to help me select a list of randam artists from my own lastfm library. It's usefull when you have a large library and can't remember all the artists you've listened to or can't decide what to listen next. 
 
-As a Google Play Music (GPM) user and future YT Music user, there's no official APIs to automatically generate playlists. So I just made a little tweak using android automation app [Takser](https://play.google.com/store/apps/details?id=net.dinglisch.android.taskerm) to save a few clicks and open the bands the app returned directly on GPM.
+As a Google Play Music (GPM) user and future YT Music user, there's no official APIs to automatically generate playlists. So I just made a little tweak using android automation app [Tasker](https://play.google.com/store/apps/details?id=net.dinglisch.android.taskerm) to save a few clicks and open the bands the app returned directly on GPM.
 
 ## Configuring the web app
 Just rename the file **params.ini.template** to **params.ini** and configure the parameters bellow:
