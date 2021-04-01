@@ -60,6 +60,6 @@ To use the entire project you will need the following apps:
 - [Tasker](https://play.google.com/store/apps/details?id=net.dinglisch.android.taskerm) (Required)
 - [AutoApps](https://play.google.com/store/apps/details?id=com.joaomgcd.auto) (Required)
 - [AutoTools](https://play.google.com/store/apps/details?id=com.joaomgcd.autotools) (Optional - you can adapt a simpler version of the project to not use this plugin)
-> Don't forget to enagle the option **Allow Phone Access** inside scene, otherwise the webview cannot load javascript resources and point the scene to the correct url where you are hosting the web app.
+> Don't forget to enable the option **Allow Phone Access** inside scene, otherwise the webview cannot load javascript resources and point the scene to the correct url where you are hosting the web app.
 
 For further information about how you can use and configure Tasker and it's plugins, you can find a lot of tutorials and help in https://joaoapps.com/
