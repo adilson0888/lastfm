@@ -6,12 +6,9 @@
 */
 function getResults($limit = 1, $page = "")
 {
-
     $method = "library.getArtists";
 
-    $params = parse_ini_file("params.ini");
-
-    $url = $params["baseUrl"] . "api_key=" . $params["apiKey"] . "&method=$method&user=" . $params["user"] . "&limit=$limit";
+    $url = getenv("LASTFM_BASEURL") . "api_key=" . getenv("LASTFM_APIKEY") . "&method=$method&user=" . getenv("LASTFM_USER") . "&limit=$limit";
     $url .= !empty($page) ? "&page=$page" : "";
     $results = file_get_contents($url);
 
@@ -25,12 +22,10 @@ function getResults($limit = 1, $page = "")
  */
 function getArtistTags($mbid = '')
 {
-    //global $baseUrl, $apiKey;
-    $params = parse_ini_file("params.ini");
 
     if (strlen($mbid) > 1) {
         $method = "artist.getInfo";
-        $url = $params["baseUrl"] . "api_key=" . $params["apiKey"] . "&method=" . $method . "&mbid=$mbid";
+        $url = getenv("LASTFM_BASEURL") . "api_key=" . getenv("LASTFM_APIKEY") . "&method=" . $method . "&mbid=$mbid";
         $results = file_get_contents($url);
         $xml = new SimpleXMLElement($results);
         $artistInfo = array("tags" => $xml->artist->tags, "summary" => $xml->artist->bio->summary);
@@ -90,9 +85,7 @@ function defineSections($totalArtists)
         "insane" => 0.30
     );
 
-    $params = parse_ini_file("params.ini");
-
-    $pageLimit = $params["pagelimit"];
+    $pageLimit = getenv("LASTFM_PAGELIMIT");
 
     $sectionFim = 1;
     $sectionIni = 1;
