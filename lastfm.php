@@ -12,11 +12,7 @@ switch ($handler) {
     returnArtistTag();
     break;
 
-  default:
-    //Funções de Setup
-    
-    $params = parse_ini_file("params.ini");
-    
+  default:    
     $totalArtists = getTotalArtists();
     $sections = defineSections($totalArtists);
 
@@ -43,11 +39,11 @@ switch ($handler) {
               //Não serão feitas requisições para categorias não desejadas
               if($value <= 0 ) continue;
 
-              $xml = getResults($params["pagelimit"], rand($sections[$key][0], $sections[$key][1]));?>
+              $xml = getResults(getenv("LASTFM_PAGELIMIT"), rand($sections[$key][0], $sections[$key][1]));?>
 
               <?php
                 $artists = $xml->artists->artist;
-                $toKeep = randomGen(0, $params["pagelimit"] -1, $value);
+                $toKeep = randomGen(0, getenv("LASTFM_PAGELIMIT") -1, $value);
               ?>
               <?php foreach( $toKeep as $index ) : ?>
                 <tr>
