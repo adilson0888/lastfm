@@ -6,16 +6,11 @@ This little web app was made to help me select a list of randam artists from my 
 As a Google Play Music (GPM) user and future YT Music user, there's no official APIs to automatically generate playlists. So I just made a little tweak using android automation app [Tasker](https://play.google.com/store/apps/details?id=net.dinglisch.android.taskerm) to save a few clicks and open the bands the app returned directly on GPM.
 
 ## Configuring the web app
-Just rename the file **params.ini.template** to **params.ini** and configure the parameters bellow:
-```
-user       =
-apiKey     =
-```
-> You don't need to use **' '** or **" "**, just add the values after the **=** without spaces.
+Modify the **docker-compose.yml** file to set your LASTFM_USER and LASTFM_APIKEY env variables.
 
-**user** parameter is the user of your account or someone's else you would like to obtain informations about it's library
+**LASTFM_USER** parameter is the user of your account or someone's else you would like to obtain informations about it's library
 
-**apiKey** parameter is the lastfm developer key to use it's APIs. It can be generated [here](https://www.last.fm/api/account/create)
+**LASTFM_APIKEY** parameter is the lastfm developer key to use it's APIs. It can be generated [here](https://www.last.fm/api/account/create)
 
 ## Usgin the web app
 ![setup](https://imgshare.io/images/2020/05/25/Capture01.png)
