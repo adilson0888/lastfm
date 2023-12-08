@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  lastfm:
+    container_name: lastfmSelector
+    image: adilson0888/lastfm:latest
+    ports:
+      - "8530:80"
+    environment:
+      - LASTFM_USER=
+      - LASTFM_APIKEY=
