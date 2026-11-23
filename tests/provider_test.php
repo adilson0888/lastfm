@@ -98,6 +98,11 @@ $mbStub = new StubClient([
         'genres' => [['name' => 'trip hop', 'count' => 5], ['name' => 'downtempo', 'count' => 3]],
         'tags' => [['name' => 'trip-hop'], ['name' => 'bristol sound']],
     ],
+    '/artist/a74b1b7f' => [
+        'name' => 'Radiohead',
+        'genres' => [['name' => 'trip hop', 'count' => 5], ['name' => 'downtempo', 'count' => 3]],
+        'tags' => [['name' => 'trip-hop'], ['name' => 'bristol sound']],
+    ],
     '/artist?query=' => ['artists' => [['id' => 'a74b1b7f-71a5-4011-9441-d0b5e4122711', 'name' => 'Radiohead']]],
 ]);
 $mb = new Provider\MusicBrainzTags($mbStub, 'https://musicbrainz.org/ws/2', $cacheDir, 0.0);
@@ -112,9 +117,20 @@ $mb->artistTags('Portishead', '8f6bd1e4-fbe1-4f50-aa9b-94c450ec0f11');
 check('mb cache avoids second fetch', count($mbStub->seen) === $before);
 check('mb cache file written', is_file($cacheDir . '/8f6bd1e4-fbe1-4f50-aa9b-94c450ec0f11.json'));
 
-// With no MBID, the name is searched first.
+// Name-only lookup (the Maloja case): search then fetch, and cache BOTH the
+// name and the resolved MBID so the next call needs no MusicBrainz request.
+$nameBefore = count($mbStub->seen);
 $byName = $mb->artistTags('Radiohead', '');
-check('mb resolves mbid by name', is_array($byName));
+check('mb resolves mbid by name', $byName === ['trip hop', 'downtempo', 'trip-hop', 'bristol sound']);
+$callsForName = count($mbStub->seen) - $nameBefore;
+check('mb name lookup makes 2 calls (search + fetch)', $callsForName === 2);
+$nameKey = 'h' . hash('sha256', 'Radiohead');
+check('mb name cached on disk', is_file($cacheDir . '/' . $nameKey . '.json'));
+$afterName = count($mbStub->seen);
+$mb->artistTags('Radiohead', '');
+check('mb second name lookup is fully cached', count($mbStub->seen) === $afterName);
+$nameEntry = json_decode((string) file_get_contents($cacheDir . '/' . $nameKey . '.json'), true);
+check('mb name cache memoises mbid', ($nameEntry['mbid'] ?? '') === 'a74b1b7f-71a5-4011-9441-d0b5e4122711');
 
 // Rate limiting: a 503 must not be cached, and a later success is returned.
 $flakyDir = sys_get_temp_dir() . '/mb-flaky-' . uniqid();
@@ -159,13 +175,13 @@ $hashed = $emptyDir . '/h' . hash('sha256', 'empty-mbid') . '.json';
 check('mb empty result cached', is_file($hashed));
 
 // Hostile cache keys cannot escape the cache directory, and every file lands
-// directly inside it with a safe name.
+// directly inside it with a safe name. (No name is passed, so only the key
+// itself is exercised.)
 $evilDir = sys_get_temp_dir() . '/mb-evil-' . uniqid();
 $evilMb = new Provider\MusicBrainzTags(new StubClient(['/artist/' => ['genres' => [['name' => 'x']]]]), 'https://mb', $evilDir, 0.0);
 foreach (['../../etc/passwd', '..', '.', 'a/b', "nul\0byte"] as $evil) {
-    $evilMb->artistTags('x', $evil);
+    $evilMb->artistTags('', $evil);
 }
-$escaped = glob($evilDir . '/../*') ?: [];
 $files = glob($evilDir . '/*.json') ?: [];
 check('mb hostile keys stay in cache dir', count($files) === 5);
 $names = array_map('basename', $files);
