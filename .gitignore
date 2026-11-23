@@ -1,2 +1,6 @@
-.vscode/launch.json
-params.ini
+# MusicBrainz tag cache written at runtime.
+cache/
+
+# Local overrides
+.env
+*.local

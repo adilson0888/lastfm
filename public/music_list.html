@@ -1,7 +1,9 @@
 <html>
 
 <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"
+        integrity="sha384-Pn+PczAsODRZ2PiGg0IheRROpP7lXO1NTIjiPo6cca8TliBvaeil42fobhzvZd74"
+        crossorigin="anonymous"></script>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
         integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
@@ -12,10 +14,15 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
         integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
         crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"
+        integrity="sha384-rHEtTzUO+F6AxgVJs86ZaDoE9sm0tDz/xaSt1ohRCJoeu4gkMIUvcA4cnm60Em/k" crossorigin="anonymous">
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"
+        integrity="sha384-YwCdhNQ2IwiYajqT/nGCj0FiU5SR4oIkzYP3ffzNWtu39GKBddP0M0waDU7Zwco0"
+        crossorigin="anonymous"></script>
     <script type="text/javascript"
-        src="//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+        src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"
+        integrity="sha384-MI/QivrbkVVJ89UOOdqJK/w6TLx0MllO/LsQi9KvvJFuRHGbYtsBvbGSM8JHKCS0"
+        crossorigin="anonymous"></script>
     <meta name="viewport" content="width=480">
     <style>
         .slider {
@@ -97,7 +104,7 @@
             $("#fetchList").click(function () {
                 $("#fetchList").attr("disabled", "disabled");
                 $.ajax({
-                    url: "lastfm.php",
+                    url: "api.php",
                     cache: false,
                     data: { tunning: { classics: $(".sp-classics").first().text(), known: $(".sp-known").first().text(), adventurous: $(".sp-adventurous").first().text(), wild: $(".sp-wild").first().text(), insane: $(".sp-insane").first().text() } }
                 })
@@ -113,9 +120,9 @@
                             var tagElement = $(this);
 
                             $.ajax({
-                                url: "lastfm.php?oper=tags",
+                                url: "api.php?oper=tags",
                                 cache: false,
-                                data: { mbid: $(this).attr("id") }
+                                data: { name: $(this).attr("data-name"), mbid: $(this).attr("data-mbid") }
                             })
                                 .done(function (result) {
                                     tagElement.html(result);

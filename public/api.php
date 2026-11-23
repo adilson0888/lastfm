@@ -1,0 +1,212 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * Front controller for the AJAX endpoints.
+ *
+ *   GET  api.php?tunning[classics]=3&tunning[known]=...   -> rendered artist list
+ *   GET  api.php?oper=tags&name=<artist>&mbid=<mbid>      -> rendered tag links
+ *
+ * This is the only server-side endpoint exposed to the web; everything under
+ * /src lives outside the document root.
+ */
+
+require_once __DIR__ . '/../src/Security.php';
+require_once __DIR__ . '/../src/config.php';
+require_once __DIR__ . '/../src/Artist.php';
+require_once __DIR__ . '/../src/ProviderInterface.php';
+require_once __DIR__ . '/../src/Http/JsonClient.php';
+require_once __DIR__ . '/../src/Provider/ListenBrainzProvider.php';
+require_once __DIR__ . '/../src/Provider/MalojaProvider.php';
+require_once __DIR__ . '/../src/Provider/MusicBrainzTags.php';
+require_once __DIR__ . '/../src/Provider/Factory.php';
+require_once __DIR__ . '/../src/Library.php';
+require_once __DIR__ . '/../src/Text.php';
+
+header('Content-Type: text/html; charset=utf-8');
+Security::headers();
+
+$config = Config::fromEnv();
+
+try {
+    $provider = Provider\Factory::create($config);
+} catch (\Throwable) {
+    // Never surface configuration or upstream details to the client.
+    http_response_code(500);
+    echo '<div class="alert alert-danger">The service is not configured correctly.</div>';
+    exit;
+}
+
+$operation = is_string($_GET['oper'] ?? null) ? $_GET['oper'] : '';
+
+if ($operation === 'tags') {
+    renderTags(
+        Provider\Factory::tags($config),
+        scalarString($_GET['name'] ?? ''),
+        scalarString($_GET['mbid'] ?? ''),
+    );
+    exit;
+}
+
+renderList($provider, $config);
+
+
+/**
+ * Coerce a request value to a string, rejecting arrays and other types.
+ */
+function scalarString(mixed $value): string
+{
+    return is_string($value) ? $value : '';
+}
+
+/**
+ * Render the randomly selected artist rows for the requested tuning.
+ */
+function renderList(ProviderInterface $provider, Config $config): void
+{
+    $tuning = $_REQUEST['tunning'] ?? [];
+    if (!is_array($tuning)) {
+        $tuning = [];
+    }
+
+    try {
+        $totalArtists = $provider->totalArtists();
+    } catch (\Throwable) {
+        echo '<div class="alert alert-danger">Could not reach the music service.</div>';
+        return;
+    }
+
+    if ($totalArtists <= 0) {
+        echo '<div class="alert alert-warning">No listening history found for this account.</div>';
+        return;
+    }
+
+    $sections = Library::sections($totalArtists);
+    $pageLimit = $config->pageLimit();
+
+    // Collect every rank we need, then fetch each upstream page only once.
+    $wantedRanks = [];
+    foreach (Library::sectionNames() as $name) {
+        $quantity = (int) ($tuning[$name] ?? 0);
+        if ($quantity <= 0 || !isset($sections[$name])) {
+            continue;
+        }
+        if ($quantity > $pageLimit) {
+            $quantity = $pageLimit;
+        }
+        [$start, $end] = $sections[$name];
+        foreach (Library::randomRanks($start, $end, $quantity) as $rank) {
+            $wantedRanks[] = $rank;
+        }
+    }
+
+    if ($wantedRanks === []) {
+        echo '<div class="alert alert-info">Adjust the sliders and fetch again.</div>';
+        return;
+    }
+
+    try {
+        $pageCache = fetchPages($provider, $wantedRanks, $pageLimit);
+    } catch (\Throwable) {
+        echo '<div class="alert alert-danger">Could not reach the music service.</div>';
+        return;
+    }
+
+    ?>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <span class="glyphicon glyphicon-music" aria-hidden="true"></span>
+          04 - Results
+        </h3>
+      </div>
+      <div class="panel-body">
+        <table class="table table-striped">
+          <tbody>
+          <?php foreach ($wantedRanks as $rank) : ?>
+            <?php if (!isset($pageCache[$rank])) { continue; } ?>
+            <?php $artist = $pageCache[$rank]; ?>
+            <?php $url = $config->taskerScheme() . '://' . rawurlencode(Text::stripAccents($artist->name)); ?>
+            <?php $image = $artist->imageUrl !== '' ? $artist->imageUrl : Security::selfDir() . '/img/artist.svg'; ?>
+            <tr>
+              <td>
+                <a href="<?= htmlspecialchars($url, ENT_QUOTES) ?>">
+                  <img src="<?= htmlspecialchars($image, ENT_QUOTES) ?>" alt="" width="34" height="34">
+                </a>
+              </td>
+              <td>
+                <a class="artistTitle"
+                   href="<?= htmlspecialchars($url, ENT_QUOTES) ?>"><?= htmlspecialchars($artist->name, ENT_QUOTES) ?></a><br/>
+                <span class="glyphicon glyphicon-fire" aria-hidden="true"></span>&nbsp;
+                <span style="font-size:15px;"><?= htmlspecialchars($artist->playcount, ENT_QUOTES) ?></span><br/>
+                <div class="tags-area"
+                     data-name="<?= htmlspecialchars($artist->name, ENT_QUOTES) ?>"
+                     data-mbid="<?= htmlspecialchars($artist->mbid, ENT_QUOTES) ?>"></div>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <?php
+}
+
+/**
+ * Fetch the upstream pages covering all requested 1-based ranks.
+ *
+ * @param int[] $ranks
+ * @return array<int,Artist> rank => Artist
+ */
+function fetchPages(ProviderInterface $provider, array $ranks, int $pageLimit): array
+{
+    $pagesNeeded = [];
+    foreach ($ranks as $rank) {
+        $pagesNeeded[(int) ceil($rank / $pageLimit)] = true;
+    }
+
+    // Guard against pathological page counts from a huge (untrusted) library size.
+    if (count($pagesNeeded) > 50) {
+        $pagesNeeded = array_slice($pagesNeeded, 0, 50, true);
+    }
+
+    $byRank = [];
+    foreach (array_keys($pagesNeeded) as $page) {
+        $artists = $provider->artists($pageLimit, $page);
+        $baseRank = ($page - 1) * $pageLimit + 1;
+        foreach ($artists as $offset => $artist) {
+            $byRank[$baseRank + $offset] = $artist;
+        }
+    }
+
+    return $byRank;
+}
+
+/**
+ * Render the tag links for a single artist, resolved from MusicBrainz.
+ */
+function renderTags(Provider\MusicBrainzTags $tags, string $name, string $mbid): void
+{
+    if ($name === '' && $mbid === '') {
+        return;
+    }
+
+    try {
+        $names = $tags->artistTags($name, $mbid);
+    } catch (\Throwable) {
+        return;
+    }
+
+    if ($names === []) {
+        return;
+    }
+
+    echo '<span style="font-size:11px; line-height:normal">';
+    foreach ($names as $tag) {
+        $url = 'https://musicbrainz.org/tag/' . rawurlencode($tag);
+        echo '<a href="' . htmlspecialchars($url, ENT_QUOTES) . '">'
+            . htmlspecialchars($tag, ENT_QUOTES) . '</a> &middot; ';
+    }
+    echo '</span>';
+}

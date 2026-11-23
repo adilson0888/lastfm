@@ -1,11 +1,24 @@
-version: '3'
-
 services:
-  lastfm:
+  lastfm-selector:
     container_name: lastfmSelector
     image: adilson0888/lastfm:latest
     ports:
       - "8530:80"
     environment:
-      - LASTFM_USER=
-      - LASTFM_APIKEY=
+      # Which backend to read from: "listenbrainz" or "maloja".
+      - SOURCE=listenbrainz
+
+      # --- ListenBrainz ---
+      - LB_USER=your_listenbrainz_username
+      # Optional: only needed for authenticated metadata lookups.
+      - LB_TOKEN=
+      - LB_BASEURL=https://api.listenbrainz.org
+
+      # --- Maloja (only used when SOURCE=maloja) ---
+      - MALOJA_BASEURL=
+      - MALOJA_APIKEY=
+
+      # Upstream page size and deep-link scheme used by the Tasker integration.
+      - ARTIST_PAGELIMIT=100
+      - TASKER_URL_SCHEME=tasker
+    restart: unless-stopped

@@ -1,60 +1,210 @@
 # lastfm random artists' fetcher
-Web application to fetch a random list of artists from a lastfm user library
 
-This little web app was made to help me select a list of randam artists from my own lastfm library. It's usefull when you have a large library and can't remember all the artists you've listened to or can't decide what to listen next. 
+Web application to fetch a random list of artists from a listening-history
+library, weighted across five "adventure" tiers (classics → insane).
 
-As a Google Play Music (GPM) user and future YT Music user, there's no official APIs to automatically generate playlists. So I just made a little tweak using android automation app [Tasker](https://play.google.com/store/apps/details?id=net.dinglisch.android.taskerm) to save a few clicks and open the bands the app returned directly on GPM.
+Originally built against the Last.fm API. Last.fm has announced that it will
+start **charging for API access**, so this version drops Last.fm entirely and
+reads from either **[ListenBrainz](https://listenbrainz.org)** or a
+self-hosted **[Maloja](https://github.com/krateng/maloja)** instance.
 
-## Configuring the web app
-Modify the **docker-compose.yml** file to set your LASTFM_USER and LASTFM_APIKEY env variables.
+## Why these two backends?
 
-**LASTFM_USER** parameter is the user of your account or someone's else you would like to obtain informations about it's library
+The app only ever needed three things from Last.fm:
 
-**LASTFM_APIKEY** parameter is the lastfm developer key to use it's APIs. It can be generated [here](https://www.last.fm/api/account/create)
+1. **the ranked artist library** (artists ordered by playcount),
+2. **the total number of artists**, and
+3. **per-artist style tags**.
 
-## Usgin the web app
+Here is how the alternatives compare against those needs:
+
+| Need | Last.fm (old) | ListenBrainz | Maloja |
+| --- | --- | --- | --- |
+| Ranked artist library | `library.getArtists` (paged) | `GET /1/stats/user/{user}/artists` (`count`, `offset`) — ranked, paginated | `GET /apis/mlj_1/charts/artists` — ranked, whole list |
+| Total artist count | `total` field | `total_artist_count` | length of the chart |
+| Artist style tags | `artist.getInfo` `toptags` | ✗ (metadata API needs a token) | ✗ (native API has no tags) |
+| Auth | API key required | public for read endpoints | optional API key |
+| Cost | **Now paid** | free | free / self-hosted |
+| Images | removed upstream | none | via Fanart.tv (needs a key) |
+
+**Recommendation: ListenBrainz as the primary source, Maloja as the alternative.**
+
+- ListenBrainz's `/1/stats/user/{user}/artists` endpoint is a near drop-in for
+  `library.getArtists`, and its read endpoints need no API key. If you already
+  scrobble to ListenBrainz, you can switch with a single env var.
+- Maloja is the better choice if you want everything **self-hosted** and
+  independent of any third party. It exposes a ranked artist chart, but no tags.
+- The two compose nicely: Maloja can itself forward scrobbles to ListenBrainz
+  (`scrobble_listenbrainz`), so you can run Maloja for storage and
+  ListenBrainz for reach.
+
+> **Note on large libraries:** ListenBrainz only computes statistics for the
+> **top 1000 artists**; requests beyond that return nothing. The app clamps the
+> section math to that window, so on very large libraries the "insane" tier
+> means the bottom of the top 1000 rather than of the whole library. Maloja has
+> no such limit.
+
+### Where do the tags come from now?
+
+Neither ListenBrainz (anonymously) nor Maloja expose artist styles, so tags are
+resolved from the **MusicBrainz** public API
+(`/ws/2/artist/{mbid}?inc=genres tags`), which is free, keyless and returns
+curated *genres* before community tags — an upgrade over Last.fm's `toptags`.
+
+MusicBrainz throttles anonymous clients to about **one request per second** and
+replies `503` when exceeded. The app handles this: it spaces and serialises
+requests across processes, honours `Retry-After`, retries a few times, and
+caches successful lookups (including "no tags") on disk for a day. Failures are
+never cached.
+
+## Configuring
+
+Set environment variables in `docker-compose.yml` (or your orchestrator):
+
+| Variable | Used by | Description |
+| --- | --- | --- |
+| `SOURCE` | both | `listenbrainz` (default) or `maloja` |
+| `LB_USER` | listenbrainz | your ListenBrainz username |
+| `LB_TOKEN` | listenbrainz | optional user token (only for authenticated calls) |
+| `LB_BASEURL` | listenbrainz | default `https://api.listenbrainz.org` |
+| `MALOJA_BASEURL` | maloja | e.g. `https://maloja.example.com` |
+| `MALOJA_APIKEY` | maloja | optional read API key, if your instance needs one |
+| `ARTIST_PAGELIMIT` | both | artists per upstream request (default `100`) |
+| `TASKER_URL_SCHEME` | both | deep-link scheme for the Tasker integration (default `tasker`) |
+| `CONTACT_URL` | both | contact URL/email used in the MusicBrainz User-Agent |
+
+### Example: ListenBrainz
+
+```yaml
+services:
+  lastfm-selector:
+    image: adilson0888/lastfm:latest
+    ports: [ "8530:80" ]
+    environment:
+      - SOURCE=listenbrainz
+      - LB_USER=your_username
+```
+
+### Example: Maloja
+
+```yaml
+services:
+  lastfm-selector:
+    image: adilson0888/lastfm:latest
+    ports: [ "8530:80" ]
+    environment:
+      - SOURCE=maloja
+      - MALOJA_BASEURL=https://maloja.example.com
+      # - MALOJA_APIKEY=...
+```
+
+## Using the web app
+
 ![setup](https://imgshare.io/images/2020/05/25/Capture01.png)
+
 ### 01. How many artists
-Slide for amount of artists you would like to retrieve
+
+Slide for the number of artists to retrieve.
+
 ### 02. Adventure's Tunning
-Adjust the kind of artists you would like to retreive. Here's how the logic is applyed to selected ther artists from the library
 
-Lastfm orders the artists in the library based on how many times you've listened to each artists, so the artists you hear the most will be on the top of the list.
-The app groups the artists in five sections (classics, known, adventurous, wild and insanes --dont mind about the names) 
+Adjust which part of the library to draw from. The library is ranked by
+playcount (most-played first) and split into five sections. Each section covers
+a fraction of the library:
 
-The categories correspond to a percentage portion of the library as follows:
+- classics: 5%
+- known: 15%
+- adventurous: 25%
+- wild: 25%
+- insane: 30%
 
-- classics : 5%
-- known : 15%
-- adventurous : 25%
-- wild : 25%
-- insane : 30% 
-
-In this section, each slides correponds to the amount of artists you want in your list from the respective category. For exemple, if you put 3 in classics (first vertical slide) you will get 3 randomlly picked artists of the firts 5% of the library.
-The quantity of this slides sums the total selected on ther first stage.
+Each vertical slider sets how many random artists to take **from that section**.
+The horizontal slider at the top sets the total; the per-section numbers are
+proportional to it.
 
 ### 03. Reviewing
-Just a description of what you've configured in the previous sections
 
-Click on Fetch button.
+A summary of the configuration above. Click **Fetch**.
 
 ### 04. Results
+
 ![results](https://imgshare.io/images/2020/05/25/Capture02.png)
 
-The list of bands requested will show with the following info:
+Each artist shows:
+
 - Artist name;
-- Artist tasker url to be used as described on next section (you can change this url to directly open your favorite music streamming service);
-- Tags from the music style of each artist;
-- Should return an image of the correponding artist, but lastfm removed this option from its APis and now we just have a giant star;
+- A deep link (default `tasker://…`) to open the artist in your own music app;
+- Style tags, resolved live from MusicBrainz;
 - The number of times you have listened to that artist.
 
-## Using Tasker Project
-You will notice that all artists urls are pointing something like tasker://Iron Maiden, this is a internal url that can be intercepted by tasker and execute the script to automatically open this artist on GPM.
-To use this tasker project, you just need to import the file **tasker/LastFm.prj.xml** on your Tasker app. 
-To use the entire project you will need the following apps:
-- [Tasker](https://play.google.com/store/apps/details?id=net.dinglisch.android.taskerm) (Required)
-- [AutoApps](https://play.google.com/store/apps/details?id=com.joaomgcd.auto) (Required)
-- [AutoTools](https://play.google.com/store/apps/details?id=com.joaomgcd.autotools) (Optional - you can adapt a simpler version of the project to not use this plugin)
-> Don't forget to enable the option **Allow Phone Access** inside scene, otherwise the webview cannot load javascript resources and point the scene to the correct url where you are hosting the web app.
+## Using the Tasker project
 
-For further information about how you can use and configure Tasker and it's plugins, you can find a lot of tutorials and help in https://joaoapps.com/
+The artist links point at an internal URL such as `tasker://Iron-Maiden`, which
+Tasker intercepts to open the artist in your preferred app. To use it, import
+`tasker/LastFm.prj.xml` into Tasker. You will need:
+
+- [Tasker](https://play.google.com/store/apps/details?id=net.dinglisch.android.taskerm) (required)
+- [AutoApps](https://play.google.com/store/apps/details?id=com.joaoapps.auto) (required)
+- [AutoTools](https://play.google.com/store/apps/details?id=com.joaoapps.autotools) (optional)
+
+> Enable **Allow Phone Access** inside the scene, otherwise the webview cannot
+> load JavaScript resources or reach the app host.
+
+## Architecture
+
+```
+public/                 -> the only directory served by the web server
+  index.php             -> redirects to the UI
+  api.php               -> AJAX endpoint: renders the artist list and tag links
+  music_list.html       -> the single-page UI (sliders + AJAX)
+  img/artist.svg        -> placeholder image
+src/                    -> application code (outside the web root)
+  config.php            -> environment-driven configuration
+  Security.php          -> security headers + self-URL helper
+  Artist.php            -> normalized artist value object
+  ProviderInterface.php
+  Library.php           -> section math + random selection
+  Text.php              -> accent stripping + deep links
+  Http/JsonClient.php   -> small cURL JSON client (retries, status, Retry-After)
+  Provider/
+    Factory.php          -> builds the configured provider + tag source
+    ListenBrainzProvider.php
+    MalojaProvider.php
+    MusicBrainzTags.php  -> rate-limited, cached tag lookups
+docker/                 -> hardened Apache configuration
+tests/                  -> dependency-free test scripts
+```
+
+Run the tests with PHP 8.4:
+
+```sh
+php tests/logic_test.php
+php tests/provider_test.php
+```
+
+## Security
+
+- **The web root is `public/` only.** `src/`, `cache/`, `tests/`, the
+  Dockerfile and the compose file live outside it and are additionally denied by
+  Apache, so application code and cached data can never be downloaded.
+- **No secrets in the repository or the image.** Credentials are read from the
+  environment at runtime; nothing is hard-coded or baked into a layer.
+- **All output is HTML-escaped**, so upstream artist names, MBIDs and tags
+  cannot inject markup.
+- **Hardened HTTP responses:** `Content-Security-Policy`,
+  `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy` and
+  `Permissions-Policy`, with `ServerTokens Prod` (no version banner) and
+  directory listing disabled.
+- **Errors are never shown to clients**; they go to the container log, and the
+  UI shows generic messages.
+- **Cache files use validated UUID or hashed names**, so no request value can
+  influence a path on disk.
+- **Front-end libraries are pinned with Subresource Integrity (SRI).** Note the
+  vendored jQuery/Bootstrap versions are old; upgrading them is a sensible
+  follow-up but out of scope for this migration.
+
+## Requirements
+
+- Docker (the image is built on **PHP 8.4** with Apache and the `curl` extension;
+  the previous image used the long-out-of-support PHP 8.0).
+- Outbound HTTPS access to the chosen backend and to `musicbrainz.org`.
