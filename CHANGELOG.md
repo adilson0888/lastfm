@@ -3,6 +3,26 @@
 All notable changes to this project are documented here.
 This project follows [Semantic Versioning](https://semver.org/).
 
+## [2.0.2] - 2026-11-23
+
+### Fixed
+
+- **Tag loading was very slow with Maloja.** Maloja returns artist names but
+  no MBIDs, so every tag request re-resolved against MusicBrainz on each page
+  load (a name search plus an MBID fetch, both rate-limited) and cached nothing
+  under the name.
+
+### Changed
+
+- MusicBrainz results are now cached by artist **name** as well as by MBID, and
+  the MBID resolved for a name is remembered so later lookups use the cached
+  MBID path.
+- The cross-process rate-limit lock is released before sleeping, so concurrent
+  tag requests queue by time slot instead of serialising on the lock.
+
+Measured against a live Maloja instance: a cached tag lookup dropped from about
+4.3s to 7ms, and six concurrent cached lookups from about 25.7s to 39ms.
+
 ## [2.0.1] - 2026-11-23
 
 ### Fixed
