@@ -3,6 +3,23 @@
 All notable changes to this project are documented here.
 This project follows [Semantic Versioning](https://semver.org/).
 
+## [2.0.4] - 2026-11-23
+
+### Changed
+
+- **Tag lookups are now batched.** The UI previously issued one request per
+  artist row; a page of 20 rows meant 20 concurrent MusicBrainz lookups, which
+  tripped its shared per-IP rate limit and took ~40s. The page now posts all
+  rows to a single `tags-batch` endpoint, so pacing happens in one place.
+
+### Fixed
+
+- Retry backoff now honours `Retry-After` exactly instead of escalating
+  (1s, 2s, 3s…), which had been keeping MusicBrainz's shared bucket drained.
+
+Measured: a cold batch of 6 artists went from ~43s to ~22s; a warm batch is a
+single request returning in ~13ms.
+
 ## [2.0.3] - 2026-11-23
 
 ### Fixed

@@ -125,19 +125,29 @@
                             scrollTop: $("#ajax-list-results").offset().top
                         }, 600);
 
-                        $(".tags-area").each(function () {
+                        // Resolve every row's tags in ONE request rather than one
+                        // per row; a burst of per-row calls trips MusicBrainz's
+                        // per-IP rate limit and makes the batch very slow.
+                        var artists = $(".tags-area").map(function () {
+                            return { name: $(this).attr("data-name"), mbid: $(this).attr("data-mbid") };
+                        }).get();
 
-                            var tagElement = $(this);
-
+                        if (artists.length) {
                             $.ajax({
-                                url: "api.php?oper=tags",
+                                url: "api.php?oper=tags-batch",
+                                method: "POST",
+                                contentType: "application/json",
                                 cache: false,
-                                data: { name: $(this).attr("data-name"), mbid: $(this).attr("data-mbid") }
-                            })
-                                .done(function (result) {
-                                    tagElement.html(result);
+                                data: JSON.stringify(artists)
+                            }).done(function (map) {
+                                $(".tags-area").each(function () {
+                                    var html = map[$(this).attr("data-name")];
+                                    if (html) {
+                                        $(this).html(html);
+                                    }
                                 });
-                        });
+                            });
+                        }
 
                     });
             });

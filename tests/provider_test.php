@@ -220,3 +220,30 @@ check('maloja no key param when unset', !array_key_exists('key', $lastNoKeyQuery
 // Maloja error status -> empty chart, not a crash.
 $badMaloja = new Provider\MalojaProvider(new StubClient(['/apis/mlj_1/' => ['status' => 'error']]), 'https://x');
 check('maloja error yields empty', $badMaloja->totalArtists() === 0);
+
+// --- Batch lookup: one pass over many artists, no redundant fetches. ---
+$batchDir = sys_get_temp_dir() . '/mb-batch-' . uniqid();
+$batchStub = new StubClient([
+    '/artist/8f6bd1e4' => ['genres' => [['name' => 'trip hop']]],
+    '/artist/a74b1b7f' => ['genres' => [['name' => 'art rock']]],
+    '/artist?query=' => ['artists' => [['id' => '8f6bd1e4-fbe1-4f50-aa9b-94c450ec0f11']]],
+]);
+$batch = new Provider\MusicBrainzTags($batchStub, 'https://mb', $batchDir, 0.0);
+
+$res = $batch->artistTagsBatch([
+    ['name' => 'Portishead', 'mbid' => '8f6bd1e4-fbe1-4f50-aa9b-94c450ec0f11'],
+    ['name' => 'Radiohead'],
+    ['name' => '', 'mbid' => ''],
+]);
+check('batch returns one row per valid artist', count($res) === 2);
+check('batch keeps names', $res[0]['name'] === 'Portishead' && $res[1]['name'] === 'Radiohead');
+check('batch resolves tags', $res[0]['tags'] === ['trip hop']);
+check('batch flags cached=false on first pass', $res[0]['cached'] === false);
+
+$before = count($batchStub->seen);
+$res2 = $batch->artistTagsBatch([
+    ['name' => 'Portishead', 'mbid' => '8f6bd1e4-fbe1-4f50-aa9b-94c450ec0f11'],
+    ['name' => 'Radiohead'],
+]);
+check('batch second pass makes no upstream calls', count($batchStub->seen) === $before);
+check('batch second pass flags cached=true', $res2[0]['cached'] === true && $res2[1]['cached'] === true);

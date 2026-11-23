@@ -84,6 +84,44 @@ final class MusicBrainzTags
         return $tags ?? [];
     }
 
+    /**
+     * Resolve tags for many artists in one pass.
+     *
+     * The browser issues a single request per page instead of one per row.
+     * Cached artists cost nothing; the rest are fetched in order under the
+     * shared throttle, so the pacing is controlled in one place rather than by
+     * a burst of concurrent requests that trip MusicBrainz's rate limit.
+     *
+     * @param array<int,array{name:string,mbid?:string}> $artists
+     * @return array<int,array{name:string,mbid:string,tags:string[],cached:bool}>
+     */
+    public function artistTagsBatch(array $artists): array
+    {
+        $out = [];
+        foreach ($artists as $artist) {
+            $name = is_array($artist) ? (string) ($artist['name'] ?? '') : (string) $artist;
+            $mbid = is_array($artist) ? (string) ($artist['mbid'] ?? '') : '';
+            $name = substr(trim($name), 0, 256);
+            $mbid = substr(trim($mbid), 0, 64);
+
+            if ($name === '' && $mbid === '') {
+                continue;
+            }
+
+            $cached = false;
+            if ($mbid !== '' && $this->readCache($mbid) !== null) {
+                $cached = true;
+            } elseif ($name !== '' && $this->readCache($name) !== null) {
+                $cached = true;
+            }
+
+            $tags = $this->artistTags($name, $mbid);
+            $out[] = ['name' => $name, 'mbid' => $mbid, 'tags' => $tags, 'cached' => $cached];
+        }
+
+        return $out;
+    }
+
     /** @return string[]|null null means "lookup failed"; [] means "no tags". */
     private function lookupById(string $mbid): ?array
     {
@@ -156,9 +194,12 @@ final class MusicBrainzTags
                 return null;
             }
 
-            $wait = $retryAfter !== null && ctype_digit($retryAfter)
+            // Honour Retry-After exactly. MusicBrainz sends a small value
+            // (usually 1s); a long escalating backoff just keeps the shared
+            // per-IP bucket drained and makes the next request fail too.
+            $wait = ($retryAfter !== null && ctype_digit($retryAfter))
                 ? (int) $retryAfter
-                : $attempt;
+                : 1;
             $this->sleep((int) ceil($wait * $this->sleepScale));
         }
 

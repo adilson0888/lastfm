@@ -49,6 +49,11 @@ if ($operation === 'tags') {
     exit;
 }
 
+if ($operation === 'tags-batch') {
+    renderTagsBatch(Provider\Factory::tags($config));
+    exit;
+}
+
 renderList($provider, $config);
 
 
@@ -209,4 +214,69 @@ function renderTags(Provider\MusicBrainzTags $tags, string $name, string $mbid):
             . htmlspecialchars($tag, ENT_QUOTES) . '</a> &middot; ';
     }
     echo '</span>';
+}
+
+
+/**
+ * Resolve tags for every artist in one page in a single request.
+ *
+ * The browser posts JSON: [{"name":"Artist","mbid":"..."}]. The response is a
+ * JSON object mapping the artist name to rendered tag HTML, so the UI fills
+ * every row from one call instead of one request per row (which burst against
+ * MusicBrainz's per-IP rate limit).
+ */
+function renderTagsBatch(Provider\MusicBrainzTags $tags): void
+{
+    header('Content-Type: application/json; charset=utf-8');
+
+    $raw = file_get_contents('php://input');
+    $payload = is_string($raw) ? json_decode($raw, true) : null;
+    if (!is_array($payload)) {
+        http_response_code(400);
+        echo json_encode(['error' => 'expected a JSON array']);
+        return;
+    }
+
+    // Bound the batch: a page has at most ARTIST_PAGELIMIT rows.
+    $payload = array_slice($payload, 0, 100);
+
+    $out = [];
+    foreach ($payload as $entry) {
+        $name = is_array($entry) ? (string) ($entry['name'] ?? '') : '';
+        $mbid = is_array($entry) ? (string) ($entry['mbid'] ?? '') : '';
+        if ($name === '' && $mbid === '') {
+            continue;
+        }
+
+        try {
+            $names = $tags->artistTags($name, $mbid);
+        } catch (\Throwable) {
+            $names = [];
+        }
+
+        $out[$name] = renderTagLinks($names);
+    }
+
+    echo json_encode($out);
+}
+
+/**
+ * Render tag names as inline links (empty string when there are none).
+ *
+ * @param string[] $tags
+ */
+function renderTagLinks(array $tags): string
+{
+    if ($tags === []) {
+        return '';
+    }
+
+    $html = '<span style="font-size:11px; line-height:normal">';
+    foreach ($tags as $tag) {
+        $url = 'https://musicbrainz.org/tag/' . rawurlencode($tag);
+        $html .= '<a href="' . htmlspecialchars($url, ENT_QUOTES) . '">'
+            . htmlspecialchars($tag, ENT_QUOTES) . '</a> &middot; ';
+    }
+
+    return $html . '</span>';
 }
