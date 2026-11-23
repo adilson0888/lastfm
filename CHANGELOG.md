@@ -3,6 +3,22 @@
 All notable changes to this project are documented here.
 This project follows [Semantic Versioning](https://semver.org/).
 
+## [2.0.3] - 2026-11-23
+
+### Fixed
+
+- **Blank icons.** The CSP sets `default-src 'none'`, which blocked the
+  Bootstrap Glyphicons font, so the panel-header and play-count icons rendered
+  as empty boxes.
+
+### Changed
+
+- Icons are now five small **self-hosted SVGs** (`public/img/icon-*.svg`,
+  Bootstrap Icons shapes, MIT) served under the existing `img-src 'self'`.
+  No `font-src` is needed, so both CSPs stay tight.
+- Added `tests/config_test.php`, which asserts the CSPs permit exactly what the
+  markup loads (CDN origins, self-hosted images) and runs in CI.
+
 ## [2.0.2] - 2026-11-23
 
 ### Fixed
