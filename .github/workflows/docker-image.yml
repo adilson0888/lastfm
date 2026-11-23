@@ -27,6 +27,7 @@ jobs:
         run: |
           php tests/logic_test.php
           php tests/provider_test.php
+          php tests/config_test.php
 
   docker:
     runs-on: ubuntu-latest

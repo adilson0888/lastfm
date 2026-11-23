@@ -48,6 +48,16 @@
             font-weight: 400;
         }
 
+        /* Self-hosted SVG icons (Glyphicon look-alikes). inline-svg keeps them
+           on the text baseline; currentColor is not available to <img>, so the
+           SVGs carry a neutral fill. */
+        .icon {
+            width: 1em;
+            height: 1em;
+            vertical-align: -0.125em;
+            opacity: 0.6;
+        }
+
         .btn-group {
             margin-left: 10px;
         }
@@ -141,7 +151,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">
-                <span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span>
+                <img src="img/icon-volume-up.svg" class="icon" alt="" aria-hidden="true">
                 01 - How many artists
             </h3>
         </div>
@@ -153,7 +163,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">
-                <span class="glyphicon glyphicon-stats" aria-hidden="true"></span>
+                <img src="img/icon-stats.svg" class="icon" alt="" aria-hidden="true">
                 02 - Adventure's Tunning
             </h3>
         </div>
@@ -177,7 +187,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">
-                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+                <img src="img/icon-thumbs-up.svg" class="icon" alt="" aria-hidden="true">
                 03 - Reviewing
             </h3>
         </div>

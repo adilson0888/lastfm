@@ -117,7 +117,7 @@ function renderList(ProviderInterface $provider, Config $config): void
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">
-          <span class="glyphicon glyphicon-music" aria-hidden="true"></span>
+          <img src="<?= htmlspecialchars(Security::selfDir(), ENT_QUOTES) ?>/img/icon-music.svg" class="icon" alt="" aria-hidden="true">
           04 - Results
         </h3>
       </div>
@@ -138,7 +138,7 @@ function renderList(ProviderInterface $provider, Config $config): void
               <td>
                 <a class="artistTitle"
                    href="<?= htmlspecialchars($url, ENT_QUOTES) ?>"><?= htmlspecialchars($artist->name, ENT_QUOTES) ?></a><br/>
-                <span class="glyphicon glyphicon-fire" aria-hidden="true"></span>&nbsp;
+                <img src="<?= htmlspecialchars(Security::selfDir(), ENT_QUOTES) ?>/img/icon-fire.svg" class="icon" alt="" aria-hidden="true">&nbsp;
                 <span style="font-size:15px;"><?= htmlspecialchars($artist->playcount, ENT_QUOTES) ?></span><br/>
                 <div class="tags-area"
                      data-name="<?= htmlspecialchars($artist->name, ENT_QUOTES) ?>"

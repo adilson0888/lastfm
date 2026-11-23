@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="1em" height="1em" fill="currentColor" aria-hidden="true">
+  <!-- Bootstrap Icons: music-note-beamed (MIT) -->
+  <path d="M6 13c0 1.105-1.12 2-2.5 2S1 14.105 1 13s1.12-2 2.5-2 2.5.895 2.5 2"/>
+  <path fill-rule="evenodd" d="M6 13V2l8-1.5V12l-.004.045.004.004V13c0 1.105-1.12 2-2.5 2s-2.5-.895-2.5-2 1.12-2 2.5-2c.072 0 .143.002.213.005L12 3.868v5.132l-.004.045.004.004V10c0 .098-.009.194-.026.288z"/>
+</svg>

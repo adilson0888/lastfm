@@ -18,7 +18,8 @@ final class Security
         header('Permissions-Policy: geolocation=(), microphone=(), camera=()');
         header(
             "Content-Security-Policy: default-src 'none'; " .
-            "img-src 'self'; style-src 'unsafe-inline'; base-uri 'none'; frame-ancestors 'none'"
+            "img-src 'self'; style-src 'unsafe-inline' https://maxcdn.bootstrapcdn.com; " .
+            "base-uri 'none'; frame-ancestors 'none'"
         );
     }
 
