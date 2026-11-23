@@ -3,6 +3,15 @@
 All notable changes to this project are documented here.
 This project follows [Semantic Versioning](https://semver.org/).
 
+## [2.0.1] - 2026-11-23
+
+### Fixed
+
+- **Maloja backend returned no artists.** `/charts/artists` responds with
+  HTTP 500 when a `since=0` parameter is sent (the chart is all-time by
+  default), and the API key is now only included when configured. Verified
+  against Maloja 3.2.10.
+
 ## [2.0.0] - 2026-11-23
 
 Last.fm is dropping free API access, so this release replaces it entirely and
