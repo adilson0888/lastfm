@@ -191,6 +191,15 @@ $page2 = $maloja->artists(2, 2);
 check('maloja page 2 slice', count($page2) === 1 && $page2[0]->name === 'Boards of Canada');
 check('maloja playcount', $page[0]->playcount === '900');
 check('maloja api key sent', end($mstub->seen)['query']['key'] === 'key1');
+// Maloja returns HTTP 500 for `since=0`; the parameter must never be sent.
+check('maloja omits since', !array_key_exists('since', end($mstub->seen)['query']));
+
+// Without an API key, the key parameter is omitted entirely.
+$noKeyStub = new StubClient(['/apis/mlj_1/charts/artists' => $malojaJson]);
+$noKey = new Provider\MalojaProvider($noKeyStub, 'https://maloja.test');
+$noKey->totalArtists();
+$lastNoKeyQuery = end($noKeyStub->seen)['query'];
+check('maloja no key param when unset', !array_key_exists('key', $lastNoKeyQuery));
 
 // Maloja error status -> empty chart, not a crash.
 $badMaloja = new Provider\MalojaProvider(new StubClient(['/apis/mlj_1/' => ['status' => 'error']]), 'https://x');

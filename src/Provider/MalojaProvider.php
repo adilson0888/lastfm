@@ -21,8 +21,6 @@ use ProviderInterface;
  */
 final class MalojaProvider implements ProviderInterface
 {
-    private const MIN_TS = 0;
-
     public function __construct(
         private readonly JsonClient $http,
         private readonly string $baseUrl,
@@ -60,18 +58,24 @@ final class MalojaProvider implements ProviderInterface
     }
 
     /**
-     * Fetch and cache the full ranked artist chart for the all-time range.
+     * Fetch the full ranked artist chart for the all-time range.
+     *
+     * Maloja returns all-time data by default; passing `since=0` makes its
+     * timestamp parser raise an IndexError and return HTTP 500, so the
+     * parameter is omitted. The API key is only sent when configured.
      *
      * @return array<int,array<string,mixed>>
      */
     private function chart(): array
     {
+        $query = [];
+        if ($this->apiKey !== '') {
+            $query['key'] = $this->apiKey;
+        }
+
         $decoded = $this->http->get(
             $this->baseUrl . '/apis/mlj_1/charts/artists',
-            [
-                'since' => self::MIN_TS,
-                'key'   => $this->apiKey,
-            ],
+            $query,
             [],
             $error,
         );
